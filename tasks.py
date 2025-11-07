@@ -26,6 +26,7 @@ def my_mlp(w, X, sigma=np.tanh):
     a2 = sigma(W2 @ a1)
     f  = sigma(W3 @ a2)
     return f
+
 # -----------------------------------------------
  
 # Task 2:
@@ -38,9 +39,10 @@ def my_mlp(w, X, sigma=np.tanh):
  
 # Copy and paste the code for that function here:
 # -----------------------------------------------
-def MSE_func(w, X, y): # give the appropriate name and arguments
-    f = my_mlp(w, X)
-    MSE = np.sum((y-f)**2)
+def MSE_func(w, X, y):
+    f = my_mlp(w, X)        # f shape = (1, n)
+    f = f.flatten()         # reshape to (n,)
+    MSE = np.sum((f - y)**2)
     return MSE
 # -----------------------------------------------
  
@@ -56,9 +58,17 @@ def MSE_func(w, X, y): # give the appropriate name and arguments
  
 # Copy and paste the code for that function here:
 # -----------------------------------------------
-def dR(beta, x, y):
-    dbeta_0 = 2*np.mean((beta[0] + beta[1]*x - y))   # implement the above formula for dR/dβ₀
-    dbeta_1 = 2*np.mean((beta[0] + beta[1]*x - y)*x) # implement the above formula for dR/dβ₁
-    return np.array([dbeta_0, dbeta_1])
+#def dR(beta, x, y):
+#    dbeta_0 = 2*np.mean((beta[0] + beta[1]*x - y))   # implement the above formula for dR/dβ₀
+#    dbeta_1 = 2*np.mean((beta[0] + beta[1]*x - y)*x) # implement the above formula for dR/dβ₁
+#    return np.array([dbeta_0, dbeta_1])
  
+def dR(beta, x, y):
+    N = len(x)
+    residual = beta[0] + beta[1]*x - y 
+
+    dbeta_0 = 2/N * np.sum(residual)            
+    dbeta_1 = 2/N * np.sum(residual * x)       
+    
+    return np.array([dbeta_0, dbeta_1])
 # -----------------------------------------------
